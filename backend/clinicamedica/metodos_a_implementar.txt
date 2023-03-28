@@ -1,0 +1,17 @@
+Quero criar rest controller de medico, com service, para:
+-listar todos os médicos
+-Achar médico por CRM
+-Procurar medico por nome
+-listar pacientes de um medico
+-Atualizar medico
+-deletar medico
+-deletar paciente de um medico
+
+Quero criar um rest controller para pacientes para:
+-listar todos os pacientes
+-encontrar paciente por id
+-encontrar paciente por nome
+-encontrar medicos de um paciente
+-atualizar pacietne
+-deletar paciente
+-deletar medico de um paciente
