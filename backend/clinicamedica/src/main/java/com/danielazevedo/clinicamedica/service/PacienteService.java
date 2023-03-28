@@ -7,28 +7,28 @@ import org.springframework.stereotype.Service;
 
 import com.danielazevedo.clinicamedica.domain.exception.EntidadeEmUsoException;
 import com.danielazevedo.clinicamedica.domain.exception.EntidadeNaoEncontradaException;
-import com.danielazevedo.clinicamedica.model.Medico;
-import com.danielazevedo.clinicamedica.repository.MedicoRepository;
+import com.danielazevedo.clinicamedica.model.Paciente;
+import com.danielazevedo.clinicamedica.repository.PacienteRepository;
 
 @Service
-public class MedicoService {
+public class PacienteService {
 
 	@Autowired
-	private MedicoRepository medicoRepository;
+	private PacienteRepository pacienteRepository;
 
-	public Medico salvar(Medico medico) {
-		return medicoRepository.save(medico);
+	public Paciente salvar(Paciente paciente) {
+		return pacienteRepository.save(paciente);
 	}
 
-	public void excluir(String crm) {
+	public void excluir(Long pacienteId) {
 		try {
-			medicoRepository.deleteById(crm);
-
+			pacienteRepository.deleteById(pacienteId);
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntidadeNaoEncontradaException(String.format("Não existe um cadastro de médico com CRM %s", crm));
+			throw new EntidadeNaoEncontradaException(
+					String.format("Não existe um cadastro de paciente com código %d", pacienteId));
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoException(
-					String.format("Médico de CRM %s não pode ser removido, pois está em uso", crm));
+					String.format("Paciente de código %d não pode ser removido, pois está em uso", pacienteId));
 		}
 	}
 

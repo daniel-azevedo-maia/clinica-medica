@@ -6,6 +6,7 @@ public enum Especialidade {
     DERMATOLOGIA,
     GINECOLOGIA,
     PEDIATRIA,
-    PSICOLOGIA
+    PSICOLOGIA,
+    PSIQUIATRIA
 
 }
