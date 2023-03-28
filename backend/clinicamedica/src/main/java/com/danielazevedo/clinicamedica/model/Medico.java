@@ -21,7 +21,7 @@ public class Medico {
 
 	@EqualsAndHashCode.Include
 	@Id
-	private Long crm;
+	private String crm;
 	private String nome;
 
 	@Enumerated(EnumType.STRING)

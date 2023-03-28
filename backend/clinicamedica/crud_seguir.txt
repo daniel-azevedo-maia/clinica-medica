@@ -1,0 +1,260 @@
+Primeiro, adicione um repositório para Paciente:
+
+@Repository
+public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+
+    List<Paciente> findByNomeContainingIgnoreCase(String nome);
+
+}
+
+Agora, atualize o MedicoController com os métodos solicitados:
+
+@RestController
+@RequestMapping("/medicos")
+public class MedicoController {
+	
+	@Autowired
+	private MedicoRepository medicoRepository;
+	
+	@Autowired
+	private PacienteRepository pacienteRepository;
+
+	@GetMapping
+	public List<Medico> listarMedicos() {
+		return medicoRepository.findAll();
+	}
+
+	@GetMapping("/{crm}")
+	public ResponseEntity<Medico> buscarPorCRM(@PathVariable String crm) {
+		Optional<Medico> medico = medicoRepository.findById(crm);
+
+		if (medico.isPresent()) {
+			return ResponseEntity.ok(medico.get());
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+	@GetMapping("/nome/{nome}")
+	public List<Medico> buscarPorNome(@PathVariable String nome) {
+		return medicoRepository.findByNomeContainingIgnoreCase(nome);
+	}
+
+	@GetMapping("/{crm}/pacientes")
+	public ResponseEntity<List<Paciente>> listarPacientesPorMedico(@PathVariable String crm) {
+		Optional<Medico> medico = medicoRepository.findById(crm);
+
+		if (medico.isPresent()) {
+			return ResponseEntity.ok(medico.get().getPacientes());
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+	@PutMapping("/{crm}")
+	public ResponseEntity<?> atualizarMedico(@PathVariable String crm, @RequestBody Medico medicoAtualizado) {
+		Optional<Medico> medicoExistente = medicoRepository.findById(crm);
+
+		if (medicoExistente.isPresent()) {
+			BeanUtils.copyProperties(medicoAtualizado, medicoExistente.get(), "crm");
+			medicoRepository.save(medicoExistente.get());
+			return ResponseEntity.ok(medicoExistente.get());
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+	@DeleteMapping("/{crm}")
+	public ResponseEntity<?> deletarMedico(@PathVariable String crm) {
+		Optional<Medico> medico = medicoRepository.findById(crm);
+
+		if (medico.isPresent()) {
+			medicoRepository.delete(medico.get());
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+	@DeleteMapping("/{crm}/pacientes/{pacienteId}")
+	public ResponseEntity<?> deletarPacienteDeMedico(@PathVariable String crm, @PathVariable Long pacienteId) {
+		Optional<Medico> medico = medicoRepository.findById(crm);
+		Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+
+		if (medico.isPresent() && paciente.isPresent()) {
+			medico.get().getPacientes().remove(paciente.get());
+			medicoRepository.save(medico.get());
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.notFound().build();
+	}
+
+}
+
+Agora, crie o PacienteController:
+
+@RestController
+@RequestMapping("/pacientes")
+public class PacienteController {
+
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private MedicoRepository medicoRepository;
+
+    @GetMapping
+    public List<Paciente> listarPacientes() {
+        return pacienteRepository.findAll();
+    }
+
+    @GetMapping("/{pacienteId}")
+public ResponseEntity<Paciente> buscarPorId(@PathVariable Long pacienteId) {
+        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+
+        if (paciente.isPresent()) {
+            return ResponseEntity.ok(paciente.get());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/nome/{nome}")
+    public List<Paciente> buscarPorNome(@PathVariable String nome) {
+        return pacienteRepository.findByNomeContainingIgnoreCase(nome);
+    }
+
+    @GetMapping("/{pacienteId}/medicos")
+    public ResponseEntity<List<Medico>> listarMedicosPorPaciente(@PathVariable Long pacienteId) {
+        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+
+        if (paciente.isPresent()) {
+            return ResponseEntity.ok(paciente.get().getMedicos());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/{pacienteId}")
+    public ResponseEntity<?> atualizarPaciente(@PathVariable Long pacienteId, @RequestBody Paciente pacienteAtualizado) {
+        Optional<Paciente> pacienteExistente = pacienteRepository.findById(pacienteId);
+
+        if (pacienteExistente.isPresent()) {
+            BeanUtils.copyProperties(pacienteAtualizado, pacienteExistente.get(), "id");
+            pacienteRepository.save(pacienteExistente.get());
+            return ResponseEntity.ok(pacienteExistente.get());
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{pacienteId}")
+    public ResponseEntity<?> deletarPaciente(@PathVariable Long pacienteId) {
+        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+
+        if (paciente.isPresent()) {
+            pacienteRepository.delete(paciente.get());
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{pacienteId}/medicos/{crm}")
+    public ResponseEntity<?> deletarMedicoDePaciente(@PathVariable Long pacienteId, @PathVariable String crm) {
+        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+        Optional<Medico> medico = medicoRepository.findById(crm);
+
+        if (paciente.isPresent() && medico.isPresent()) {
+            paciente.get().getMedicos().remove(medico.get());
+            pacienteRepository.save(paciente.get());
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+}   
+    
+    
+REFATORANDO USANDO MEDICOSERVICE E PACIENTESERVICE:
+
+
+@Service
+public class MedicoService {
+
+    @Autowired
+    private MedicoRepository medicoRepository;
+
+    public Medico salvar(Medico medico) {
+        return medicoRepository.save(medico);
+    }
+
+    public void excluir(String crm) {
+        try {
+            medicoRepository.deleteById(crm);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Não existe um cadastro de médico com CRM %s", crm));
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format("Médico de CRM %s não pode ser removido, pois está em uso", crm));
+        }
+    }
+}
+    
+    
+@Service
+public class PacienteService {
+
+    @Autowired
+    private PacienteRepository pacienteRepository;
+
+    public Paciente salvar(Paciente paciente) {
+        return pacienteRepository.save(paciente);
+    }
+
+    public void excluir(Long pacienteId) {
+        try {
+            pacienteRepository.deleteById(pacienteId);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntidadeNaoEncontradaException(
+                    String.format("Não existe um cadastro de paciente com código %d", pacienteId));
+        } catch (DataIntegrityViolationException e) {
+            throw new EntidadeEmUsoException(
+                    String.format("Paciente de código %d não pode ser removido, pois está em uso", pacienteId));
+        }
+    }
+}
+    
+
+Agora vamos atualizar os controladores:
+
+MedicoController:
+
+@Autowired
+private MedicoService medicoService;
+...
+
+@PostMapping
+public ResponseEntity<?> adicionar(@RequestBody Medico medico) {
+    medico = medicoService.salvar(medico);
+    return ResponseEntity.status(HttpStatus.CREATED).body(medico);
+}
+...
+
+@DeleteMapping("/{crm}")
+public ResponseEntity<?> deletar(@PathVariable String crm) {
+    try {
+        medicoService.excluir(crm);
+        return ResponseEntity.noContent().build();
+    } catch (EntidadeNaoEncontradaException e) {
+        return ResponseEntity.notFound().build();
+    } catch (EntidadeEmUsoException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+}
+...
+    
+    
