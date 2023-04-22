@@ -3,6 +3,8 @@ package com.danielazevedo.clinicamedica.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.JOptionPane;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,6 +54,7 @@ public class PacienteController {
 	@PostMapping("/{pacienteId}/adicionarmedico/{crm}")
 	public ResponseEntity<?> adicionarMedico(@PathVariable Long pacienteId,
 			@PathVariable String crm) {
+
 		
 		Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
 		Optional<Medico> medico = medicoRepository.findById(crm);
@@ -114,16 +117,27 @@ public class PacienteController {
 	    }
 	 
 	 @DeleteMapping("/{pacienteId}")
-	    public ResponseEntity<?> deletarPaciente(@PathVariable Long pacienteId) {
-	        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
+	 public ResponseEntity<?> deletarPaciente(@PathVariable Long pacienteId) {
+	     Optional<Paciente> pacienteOptional = pacienteRepository.findById(pacienteId);
 
-	        if (paciente.isPresent()) {
-	            pacienteRepository.delete(paciente.get());
-	            return ResponseEntity.noContent().build();
-	        }
+	     if (pacienteOptional.isPresent()) {
+	         Paciente paciente = pacienteOptional.get();
+	         
+	         // Desassociar o paciente dos médicos antes de excluí-lo
+	         for (Medico medico : paciente.getMedicos()) {
+	             medico.getPacientes().remove(paciente);
+	         }
+	         paciente.getMedicos().clear();
 
-	        return ResponseEntity.notFound().build();
-	    }
+	         pacienteRepository.save(paciente); // Salvar as alterações das associações
+	         pacienteRepository.delete(paciente);
+
+	         return ResponseEntity.noContent().build();
+	     }
+
+	     return ResponseEntity.notFound().build();
+	 }
+
 	 
 	 @DeleteMapping("/{pacienteId}/medicos/{crm}")
 	    public ResponseEntity<?> deletarMedicoDePaciente(@PathVariable Long pacienteId, @PathVariable String crm) {

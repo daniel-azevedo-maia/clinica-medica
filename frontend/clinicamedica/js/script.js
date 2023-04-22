@@ -1,3 +1,19 @@
+$.ajax({
+  method: "GET",
+  url: "http://localhost:8080/medicos/",
+  contentType: "application/json; charset=utf-8",
+  success: function (response) {    
+        
+        for(let i = 0; i < response.length; i++) {
+
+          $("#medicoOpcao").append('<option value="' + response[i].nome + '">' + response[i].nome + '</option>');
+        }
+  }
+}).fail(function (xhr, status, errorThrown) {
+  alert("Erro ao buscar médico: " + xhr.responseText);
+});
+
+
 $("#nome").keyup(function () {
 
   let nome = $(this).val();
