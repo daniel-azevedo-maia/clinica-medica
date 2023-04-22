@@ -86,3 +86,8 @@ p {
   background-color: #0069d9;
   border-color: #0062cc;
 }
+
+/* Footer styles */
+.footer p {
+  margin-bottom: 0;
+}

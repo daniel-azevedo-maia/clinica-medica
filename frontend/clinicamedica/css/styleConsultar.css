@@ -113,3 +113,7 @@ p {
 .input-spacing {
   margin-bottom: 10px;
 }
+
+.footer p {
+  margin-bottom: 0;
+}
