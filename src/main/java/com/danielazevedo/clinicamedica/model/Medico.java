@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,6 +33,6 @@ public class Medico {
 	//@JsonIgnore
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "medico_paciente", joinColumns = @JoinColumn(name = "medico_crm"), inverseJoinColumns = @JoinColumn(name = "paciente_id"))
-	private List<Paciente> pacientes = new ArrayList<Paciente>();
+	private List<Paciente> pacientes = new ArrayList<>();
 
 }

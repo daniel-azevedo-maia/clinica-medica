@@ -3,13 +3,10 @@ package com.danielazevedo.clinicamedica.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.swing.JOptionPane;
-
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +24,6 @@ import com.danielazevedo.clinicamedica.service.PacienteService;
 
 @RestController
 @RequestMapping("/pacientes")
-@CrossOrigin(origins = "*")
 public class PacienteController {
 
 	@Autowired
@@ -54,7 +50,6 @@ public class PacienteController {
 	@PostMapping("/{pacienteId}/adicionarmedico/{crm}")
 	public ResponseEntity<?> adicionarMedico(@PathVariable Long pacienteId,
 			@PathVariable String crm) {
-
 		
 		Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
 		Optional<Medico> medico = medicoRepository.findById(crm);
@@ -117,27 +112,16 @@ public class PacienteController {
 	    }
 	 
 	 @DeleteMapping("/{pacienteId}")
-	 public ResponseEntity<?> deletarPaciente(@PathVariable Long pacienteId) {
-	     Optional<Paciente> pacienteOptional = pacienteRepository.findById(pacienteId);
+	    public ResponseEntity<?> deletarPaciente(@PathVariable Long pacienteId) {
+	        Optional<Paciente> paciente = pacienteRepository.findById(pacienteId);
 
-	     if (pacienteOptional.isPresent()) {
-	         Paciente paciente = pacienteOptional.get();
-	         
-	         // Desassociar o paciente dos médicos antes de excluí-lo
-	         for (Medico medico : paciente.getMedicos()) {
-	             medico.getPacientes().remove(paciente);
-	         }
-	         paciente.getMedicos().clear();
+	        if (paciente.isPresent()) {
+	            pacienteRepository.delete(paciente.get());
+	            return ResponseEntity.noContent().build();
+	        }
 
-	         pacienteRepository.save(paciente); // Salvar as alterações das associações
-	         pacienteRepository.delete(paciente);
-
-	         return ResponseEntity.noContent().build();
-	     }
-
-	     return ResponseEntity.notFound().build();
-	 }
-
+	        return ResponseEntity.notFound().build();
+	    }
 	 
 	 @DeleteMapping("/{pacienteId}/medicos/{crm}")
 	    public ResponseEntity<?> deletarMedicoDePaciente(@PathVariable Long pacienteId, @PathVariable String crm) {

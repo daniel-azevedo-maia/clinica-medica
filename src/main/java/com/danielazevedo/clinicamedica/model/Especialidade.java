@@ -7,7 +7,6 @@ public enum Especialidade {
     GINECOLOGIA,
     PEDIATRIA,
     PSICOLOGIA,
-    PSIQUIATRIA,
-    ORTOPEDIA
+    PSIQUIATRIA
 
 }
