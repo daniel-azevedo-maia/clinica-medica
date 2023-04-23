@@ -50,3 +50,23 @@ function removerMedico() {
   });
 }
 
+function mostrarPacientes() {
+  let nomeEncontrado = $("#nomeEncontrado").val();
+  let crmEncontrado = $("#crmEncontrado").val();
+  let especialidadeEncontrada = $("#especialidadeEncontrada").val();
+
+  $.ajax({
+    method: "GET",
+    url: "http://localhost:8080/medicos/" + crmEncontrado + "/pacientes",
+    contentType: "application/json; charset=utf-8",
+    success: function (response) {
+      window.location.href = 'http://127.0.0.1:5500/listarPacientes.html?crmEncontrado='+ crmEncontrado;
+    },
+  }).fail(function (xhr, status, errorThrown) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Nenhum médico consultado!",
+    });
+  });
+}

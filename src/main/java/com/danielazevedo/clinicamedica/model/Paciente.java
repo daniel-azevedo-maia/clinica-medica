@@ -30,7 +30,6 @@ public class Paciente {
 	private String nome;
 	
 
-	
 	@JsonIgnore
 	@ManyToMany(mappedBy = "pacientes", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Medico> medicos = new ArrayList<Medico>();
