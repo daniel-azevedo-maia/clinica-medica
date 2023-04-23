@@ -24,9 +24,12 @@
     .table-custom {
         background-color: #f0f0f0;
     }
-
-    
-
+    .footer {
+        background-color: #333333;
+        color: #ffffff;
+        text-align: center;
+        padding: 1rem 0;
+    }
 </style>
 
 </head>
@@ -65,8 +68,8 @@
                           Pacientes
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                          <li><a class="dropdown-item" href="cadastrarpaciente.html">Cadastrar paciente</a></li>
-                          <li><a class="dropdown-item" href="consultarpaciente.html">Consultar paciente</a></li>
+                        <li><a class="dropdown-item" href="cadastrarpaciente.html">Cadastrar paciente</a></li>
+                        <li><a class="dropdown-item" href="consultarpaciente.html">Consultar paciente</a></li>
                       </ul>
                   </li>
   
@@ -93,34 +96,24 @@
     <div class="row justify-content-center text-center">
       <div class="col-6">
         <div class="container mt-5">
-          <h2 class="mb-4">Cadastro de Médico</h2>
-          <form id="formMedico">
+          <h2 class="mb-4">Cadastro de Paciente</h2>
+          <form id="formPaciente">
             <div class="mb-3">
               <label for="nome" class="form-label">Nome</label>
-              <input type="text" class="form-control" id="nome" placeholder="Nome do médico" required />
+              <input type="text" class="form-control" id="nome" placeholder="Nome do paciente" required />
             </div>
             <div class="mb-3">
-              <label for="crm" class="form-label">CRM</label>
-              <input type="text" class="form-control" id="crm" placeholder="CRM do médico" required />
-            </div>
-            <div class="mb-3">
-              <label for="especialidade" class="form-label">Especialidade</label>
-              <select class="form-select" id="especialidade" required>
+              <label for="especialidade" class="form-label">Médico</label>
+              <select class="form-select" id="medicoOpcao" required>
                 <option value="" selected disabled>
-                  Selecione uma especialidade
+                  Selecione um médico para este paciente
                 </option>
-                <option value="CARDIOLOGIA">CARDIOLOGIA</option>
-                <option value="DERMATOLOGIA">DERMATOLOGIA</option>
-                <option value="GINECOLOGIA">GINECOLOGIA</option>
-                <option value="PEDIATRIA">PEDIATRIA</option>
-                <option value="PSICOLOGIA">PSICOLOGIA</option>
-                <option value="PSIQUIATRIA">PSIQUIATRIA</option>
-                <option value="PSIQUIATRIA">ORTOPEDIA</option>
               </select>
             </div>
+         
 
-            <button type="submit" class="btn btn-success" onclick="cadastrarMedico()">
-              Cadastrar Médico
+            <button type="submit" class="btn btn-success" onclick="cadastrarPaciente()">
+              Cadastrar Paciente
             </button>
             <a href="index.html" class="btn btn-dark">Voltar</a>
           </form>
@@ -128,13 +121,12 @@
       </div>
       <div class="col-6">
         <div class="container mt-5">
-          <h2 class="mb-4">Dados do médico</h2>
+          <h2 class="mb-4">Dados do paciente</h2>
           <div class="d-flex justify-content-center">
             <div class="card w-100">
 
               <div class="card-body text-center">
                 <h5 class="card-title text-center" id="tituloCard"></h5>
-                <p class="card-text text-center" id="crmCard"></p>
                 <p class="card-text text-center" id="especialidadeCard"></p>
               </div>
             </div>
@@ -146,10 +138,7 @@
       
     </div>
     
-       <!-- Rodapé -->
-<footer class="footer">
-  <p>Desenvolvido por Daniel Azevedo de Oliveira Maia © - 2023</p>
-</footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

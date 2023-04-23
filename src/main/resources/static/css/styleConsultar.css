@@ -1,7 +1,10 @@
+/* General styles */
 body::before {
   content: "";
   background-image: url(../img/fundo_index.jpg);
-  background-position-x: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   filter: blur(10px);
   position: fixed;
   top: 0;
@@ -11,16 +14,13 @@ body::before {
   z-index: -1;
 }
 
-h4 {
-  text-align: center;
-}
-
 body {
-  background: none;
   font-family: 'Roboto', sans-serif;
   color: #4c4c4c;
+  margin-top: 100px;
 }
 
+/* Navbar styles */
 .navbar {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
@@ -34,19 +34,7 @@ body {
   border-radius: 10px;
 }
 
-.footer {
-  text-align: center;
-  background-color: #343a40;
-  color: #ffffff;
-  font-size: 13px;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  margin-bottom: 0;
-  width: 100%;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
-
+/* Container styles */
 .container {
   padding: 30px;
   background-color: rgba(255, 255, 255, 0.9);
@@ -56,14 +44,7 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.c1 {
-  margin-top: 90px;
-}
-
-.c2 {
-  margin-bottom: 90px;
-}
-
+/* Typography */
 h4 {
   margin-bottom: 20px;
   font-weight: 500;
@@ -74,9 +55,11 @@ p {
   line-height: 1.6;
 }
 
+/* Card styles */
 .card {
   margin-bottom: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
 }
 
 .card-img-top {
@@ -89,6 +72,7 @@ p {
   font-weight: 500;
 }
 
+/* Button styles */
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
@@ -97,5 +81,23 @@ p {
 .btn-primary:hover {
   background-color: #0069d9;
   border-color: #0062cc;
+}
+
+@media (max-width: 576px) {
+  body {
+    margin-top: 75px;
+  }
+
+  .card-img-top {
+    height: 150px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+}
+
+.input-spacing {
+  margin-bottom: 10px;
 }
 

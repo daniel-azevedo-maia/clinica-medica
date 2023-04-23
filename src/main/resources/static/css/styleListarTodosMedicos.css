@@ -1,26 +1,24 @@
-/* General styles */
-body::before {
-  content: "";
+/* Custom styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  color: #4c4c4c;
   background-image: url(../img/fundo_index.jpg);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  filter: blur(10px);-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-}
-
-body {
-  font-family: 'Roboto', sans-serif;
-  color: #4c4c4c;
   margin-top: 100px;
+  position: relative;
 }
 
-/* Navbar styles */
+/* Navbar */
+.navbar-custom {
+  background-color: #003366;
+}
+
+.navbar-custom .navbar-brand, .navbar-custom .navbar-nav .nav-link {
+  color: #ffffff;
+}
+
 .navbar {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
@@ -34,20 +32,9 @@ body {
   border-radius: 10px;
 }
 
-/* Footer styles */
-.footer {
-  text-align: center;
-  background-color: #343a40;
-  color: #ffffff;
-  font-size: 13px;
-  padding: 10px;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-}
 
-/* Container styles */
+
+/* Container */
 .container {
   padding: 30px;
   background-color: rgba(255, 255, 255, 0.9);
@@ -68,7 +55,7 @@ p {
   line-height: 1.6;
 }
 
-/* Card styles */
+/* Card */
 .card {
   margin-bottom: 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -85,7 +72,7 @@ p {
   font-weight: 500;
 }
 
-/* Button styles */
+/* Button */
 .btn-primary {
   background-color: #007bff;
   border-color: #007bff;
@@ -114,7 +101,7 @@ p {
   margin-bottom: 10px;
 }
 
-/* Table styles */
+/* Table */
 .table-custom {
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -122,8 +109,6 @@ p {
   overflow: hidden;
   margin-bottom: 20px;
 }
-
-
 
 .table-custom thead {
   background-color: #007bff;
@@ -142,10 +127,15 @@ p {
 
 .table-custom tbody tr:hover {
   background-color: rgba(0, 123, 255, 0.1);
-}
-
-/* Button styles */
-.table-custom .btn {
+  }
+  
+  /* Button styles */
+  .table-custom .btn {
   margin-right: 5px;
   margin-bottom: 5px;
-}
+  }
+  
+  .main-content {
+  min-height: calc(100vh - 100px - 30px); /* 100px: altura do navbar, 30px: altura do rodapé */
+  margin-bottom: 30px;
+  }
